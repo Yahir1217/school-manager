@@ -1,44 +1,81 @@
+using backend.Data;
+using backend.Services;
+using Microsoft.EntityFrameworkCore;
+using MySqlConnector;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// 🔑 Leer cadena de conexión desde appsettings.json
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+// ⚠️ Probar conexión manualmente para debug
+try
+{
+    using var testConnection = new MySqlConnection(connectionString);
+    testConnection.Open();
+    Console.WriteLine("✅ Conexión a la base de datos exitosa");
+    testConnection.Close();
+}
+catch (Exception ex)
+{
+    Console.WriteLine("❌ Error al conectar a la base de datos:");
+    Console.WriteLine(ex.Message);
+}
+
+// 💾 Configurar DbContext con MySQL
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+// ➕ Registrar servicios propios
+builder.Services.AddScoped<AuthService>();
+
+// 📦 Agregar servicios para controladores
+builder.Services.AddControllers();
+
+// 📦 Agregar Swagger para documentación
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// 🔐 Configurar CORS para React
+var corsPolicyName = "AllowReactApp";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: corsPolicyName, policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// ✅ Ejecutar seed de datos iniciales dentro de un scope
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    Console.WriteLine("Seed: Iniciando inicialización...");
+    DbInitializer.Initialize(context);
+}
+
+// 📦 Usar Swagger solo en desarrollo
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+// 🛡 Usar HTTPS redirection
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+// 🛡 Usar CORS (importante hacerlo antes de mapear controladores)
+app.UseCors(corsPolicyName);
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+// (opcional) Autorización si tienes [Authorize]
+app.UseAuthorization();
 
+// 🚀 Mapear controladores
+app.MapControllers();
+
+// ✅ Arrancar la aplicación
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
