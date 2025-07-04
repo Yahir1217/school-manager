@@ -5,7 +5,9 @@
 /Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/backend.runtimeconfig.json
 /Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/backend.dll
 /Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/backend.pdb
+/Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/BCrypt.Net-Next.dll
 /Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/Humanizer.dll
+/Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
 /Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/Microsoft.AspNetCore.OpenApi.dll
 /Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/Microsoft.Bcl.AsyncInterfaces.dll
 /Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/Microsoft.CodeAnalysis.dll
@@ -23,6 +25,12 @@
 /Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/Microsoft.Extensions.Logging.dll
 /Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/Microsoft.Extensions.Logging.Abstractions.dll
 /Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/Microsoft.Extensions.Options.dll
+/Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/Microsoft.IdentityModel.Abstractions.dll
+/Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/Microsoft.IdentityModel.Logging.dll
+/Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/Microsoft.IdentityModel.Protocols.dll
+/Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/Microsoft.IdentityModel.Tokens.dll
 /Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/Microsoft.OpenApi.dll
 /Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/Mono.TextTemplating.dll
 /Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/MySqlConnector.dll
@@ -36,6 +44,7 @@
 /Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/System.Composition.Hosting.dll
 /Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/System.Composition.Runtime.dll
 /Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/System.Composition.TypedParts.dll
+/Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/System.IdentityModel.Tokens.Jwt.dll
 /Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/cs/Microsoft.CodeAnalysis.resources.dll
 /Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/de/Microsoft.CodeAnalysis.resources.dll
 /Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/es/Microsoft.CodeAnalysis.resources.dll
@@ -110,9 +119,3 @@
 /Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/obj/Debug/net8.0/backend.pdb
 /Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/obj/Debug/net8.0/backend.genruntimeconfig.cache
 /Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/obj/Debug/net8.0/ref/backend.dll
-/Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/BCrypt.Net-Next.dll
-/Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/Microsoft.IdentityModel.Abstractions.dll
-/Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/Microsoft.IdentityModel.JsonWebTokens.dll
-/Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/Microsoft.IdentityModel.Logging.dll
-/Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/Microsoft.IdentityModel.Tokens.dll
-/Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/bin/Debug/net8.0/System.IdentityModel.Tokens.Jwt.dll

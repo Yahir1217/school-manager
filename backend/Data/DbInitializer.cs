@@ -33,7 +33,7 @@ namespace backend.Data
             {
                 NombreCompleto = "Administrador General",
                 Correo = "admin@correo.com",
-                Telefono = "5551234567",
+                Telefono = "3231239174",
                 Rol = "director",
                 Estado = true,
                 Matricula = "ADM001",

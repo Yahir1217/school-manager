@@ -20,8 +20,7 @@ namespace backend.Models
         public string Password { get; set; } = string.Empty;
 
         public string? Telefono { get; set; }
-
-        [Required]
+    
         public string Rol { get; set; } = string.Empty; // alumno, psicologia, etc.
 
         public bool Estado { get; set; } = true;
@@ -37,5 +36,8 @@ namespace backend.Models
 
         [ForeignKey("InstitutoId")]
         public Instituto? Instituto { get; set; }
+
+        public ICollection<Notificacion>? Notificaciones { get; set; }
+
     }
 }

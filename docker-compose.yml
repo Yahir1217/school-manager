@@ -1,0 +1,47 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Jack1217
+      MYSQL_DATABASE: school_manager
+    ports:
+      - "3307:3306"  # exponemos puerto para acceso local desde host
+    volumes:
+      - db_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    depends_on:
+      - mysql
+
+  backend:
+    build: ./backend
+    container_name: backend
+    restart: no
+    ports:
+      - "5239:8080"
+    environment:
+      - ConnectionStrings__DefaultConnection=server=mysql;port=3306;database=school_manager;user=root;password=Jack1217
+    depends_on:
+      - mysql
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    restart: always
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:

@@ -1,25 +1,30 @@
 using backend.Data;
 using backend.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MySqlConnector;
+using System.Text;
+using System.Security.Claims; // 👈 AGREGA ESTA LÍNEA
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // 🔑 Leer cadena de conexión desde appsettings.json
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new Exception("❌ No se encontró la cadena de conexión en appsettings.json");
 
-// ⚠️ Probar conexión manualmente para debug
+// ✅ Probar conexión manualmente
 try
 {
     using var testConnection = new MySqlConnection(connectionString);
     testConnection.Open();
     Console.WriteLine("✅ Conexión a la base de datos exitosa");
-    testConnection.Close();
 }
 catch (Exception ex)
 {
-    Console.WriteLine("❌ Error al conectar a la base de datos:");
-    Console.WriteLine(ex.Message);
+    Console.WriteLine("❌ Error al conectar a la base de datos: " + ex.Message);
+    throw; // Detener la app si no hay conexión
 }
 
 // 💾 Configurar DbContext con MySQL
@@ -28,15 +33,36 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // ➕ Registrar servicios propios
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<UsuarioService>();
 
-// 📦 Agregar servicios para controladores
+// 🔑 Configurar JWT Authentication
+var jwtKey = builder.Configuration["Jwt:Key"]
+    ?? throw new Exception("❌ No se encontró la clave JWT en appsettings.json (Jwt:Key)");
+
+var keyBytes = Encoding.UTF8.GetBytes(jwtKey);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
+
+            // 👇 Esto indica que vamos a extraer User.Identity.Name del claim "email"
+            NameClaimType = ClaimTypes.Email
+        };
+    });
+
+// 📦 Controladores y Swagger
 builder.Services.AddControllers();
-
-// 📦 Agregar Swagger para documentación
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// 🔐 Configurar CORS para React
+// 🔐 CORS
 var corsPolicyName = "AllowReactApp";
 builder.Services.AddCors(options =>
 {
@@ -50,32 +76,32 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// ✅ Ejecutar seed de datos iniciales dentro de un scope
+// ✅ Seed inicial
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    Console.WriteLine("Seed: Iniciando inicialización...");
     DbInitializer.Initialize(context);
 }
 
-// 📦 Usar Swagger solo en desarrollo
+// 📦 Swagger solo en desarrollo
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// 🛡 Usar HTTPS redirection
+// 🛡 Redirección HTTPS
 app.UseHttpsRedirection();
 
-// 🛡 Usar CORS (importante hacerlo antes de mapear controladores)
+// 🛡 CORS antes de auth
 app.UseCors(corsPolicyName);
 
-// (opcional) Autorización si tienes [Authorize]
+// 🔑 Autenticación y autorización
+app.UseAuthentication();
 app.UseAuthorization();
 
 // 🚀 Mapear controladores
 app.MapControllers();
 
-// ✅ Arrancar la aplicación
+// ✅ Arrancar
 app.Run();
