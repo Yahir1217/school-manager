@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
-import { useNavigate } from "react-router-dom";
 
 export default function Header({ usuario }) {
-  const navigate = useNavigate();
   const [notiAbierta, setNotiAbierta] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
   const panelRef = useRef(null);
 
   const notificaciones = usuario?.notificaciones || [];
@@ -16,6 +15,24 @@ export default function Header({ usuario }) {
 
   const nombreUsuario = usuario?.nombreCompleto || "Usuario";
   const emailUsuario = usuario?.correo || "correo@dominio.com";
+
+  const handleOutsideClick = (event) => {
+    if (!event.target.closest('.dropdown-container')) {
+      setShowDropdown(false);
+    }
+  };
+
+  useEffect(() => {
+    if (showDropdown) {
+      document.addEventListener('click', handleOutsideClick);
+    } else {
+      document.removeEventListener('click', handleOutsideClick);
+    }
+
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+    };
+  }, [showDropdown]);
 
   // Cierra al dar clic fuera
   useEffect(() => {
@@ -129,8 +146,11 @@ export default function Header({ usuario }) {
                 </button>
               </div>
 
-              <div className="header-item topbar-user">
-                <button className="btn" onClick={() => navigate('/perfil')}>
+              <div className="header-item topbar-user position-relative dropdown-container">
+                <button 
+                  className="btn" 
+                  onClick={() => setShowDropdown(!showDropdown)}
+                >
                   <span className="d-flex align-items-center">
                     <div
                       className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
@@ -144,6 +164,55 @@ export default function Header({ usuario }) {
                     </span>
                   </span>
                 </button>
+
+                {showDropdown && (
+                  <div
+                    style={{
+                      overflowY: 'auto',
+                      backgroundColor: 'white',
+                      boxShadow: '0 0 15px rgba(0,0,0,0.2)',
+                      borderRadius: '8px',
+                      zIndex: 3000,
+                      padding: '10px',
+                      position: 'absolute',
+                      top: '100%',
+                      right: '0',
+                      width: '300px'
+                    }}
+                  >
+                    <div className="px-2 pt-2">
+                      <ul className="nav nav-tabs dropdown-tabs nav-tabs-custom" id="profileTab" role="tablist">
+                        <li className="nav-item waves-effect waves-light">
+                          <a className="nav-link active" data-bs-toggle="tab" href="#profile-tab" role="tab" aria-selected="true">
+                            Perfil
+                          </a>
+                        </li>
+                        <li className="nav-item waves-effect waves-light">
+                          <a className="nav-link" data-bs-toggle="tab" href="#settings-tab" role="tab" aria-selected="false">
+                            Configuración
+                          </a>
+                        </li>
+                        <li className="nav-item waves-effect waves-light">
+                          <a className="nav-link" data-bs-toggle="tab" href="#logout-tab" role="tab" aria-selected="false">
+                            Cerrar sesión
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div className="tab-content position-relative" id="profileTabContent">
+                      <div className="tab-pane fade show active py-2 ps-2" id="profile-tab" role="tabpanel">
+                        <p>Contenido del perfil</p>
+                      </div>
+                      <div className="tab-pane fade py-2 ps-2" id="settings-tab" role="tabpanel">
+                        <p>Contenido de configuración</p>
+                      </div>
+                      <div className="tab-pane fade py-2 ps-2" id="logout-tab" role="tabpanel">
+                        <p>Contenido de cerrar sesión</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

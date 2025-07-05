@@ -1,3 +1,4 @@
+version: "3.9"
 services:
   mysql:
     image: mysql:8.0
@@ -7,7 +8,7 @@ services:
       MYSQL_ROOT_PASSWORD: Jack1217
       MYSQL_DATABASE: school_manager
     ports:
-      - "3307:3306"  # exponemos puerto para acceso local desde host
+      - "3307:3306"  # Para acceso local desde host
     volumes:
       - db_data:/var/lib/mysql
 
@@ -28,9 +29,11 @@ services:
     container_name: backend
     restart: no
     ports:
-      - "5239:8080"
+      - "5239:5239"
     environment:
       - ConnectionStrings__DefaultConnection=server=mysql;port=3306;database=school_manager;user=root;password=Jack1217
+    volumes:
+      - ./backend:/app  # Monta código local para hot reload
     depends_on:
       - mysql
 
@@ -39,7 +42,10 @@ services:
     container_name: frontend
     restart: always
     ports:
-      - "5173:80"
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app  # Monta código local para hot reload
+      - /app/node_modules  # Para evitar problemas con node_modules
     depends_on:
       - backend
 

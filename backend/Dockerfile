@@ -1,35 +1,23 @@
-# Imagen base para ejecutar .NET apps
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
-EXPOSE 5239
-
-# Imagen para build
+# Imagen base con SDK para build y hot reload
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
+WORKDIR /app
 
-# Copiamos primero solo el archivo .csproj y restauramos dependencias
+# Instalamos cliente de MySQL para el script
+RUN apt-get update && apt-get install -y default-mysql-client
+
+# Copiamos el .csproj y restauramos dependencias
 COPY backend.csproj . 
 RUN dotnet restore
 
-# Ahora copiamos todo el código fuente
+# Copiamos todo el código
 COPY . .
 
-# Publicamos la app en modo Release
-RUN dotnet publish -c Release -o /app/publish
-
-# Imagen final
-FROM base AS final
-WORKDIR /app
-
-# Instalamos cliente de MySQL para usar mysqladmin
-RUN apt-get update && apt-get install -y default-mysql-client
-
-# Copiamos la app publicada
-COPY --from=build /app/publish .
-
-# Copiamos el script de espera y le damos permisos
+# Copiamos el script de espera
 COPY wait-for-mysql.sh /wait-for-mysql.sh
 RUN chmod +x /wait-for-mysql.sh
 
-# Ejecutamos el script para esperar MySQL antes de arrancar la app
-ENTRYPOINT ["/wait-for-mysql.sh", "mysql", "dotnet", "backend.dll"]
+# Exponemos puerto
+EXPOSE 5239
+
+# ENTRYPOINT final: esperamos MySQL y lanzamos dotnet watch run
+ENTRYPOINT ["/wait-for-mysql.sh", "mysql", "dotnet", "watch", "run", "--urls", "http://0.0.0.0:5239"]

@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/backend.csproj": {}
+    "/app/backend.csproj": {}
   },
   "projects": {
-    "/Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/backend.csproj": {
+    "/app/backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/backend.csproj",
+        "projectUniqueName": "/app/backend.csproj",
         "projectName": "backend",
-        "projectPath": "/Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/backend.csproj",
-        "packagesPath": "/Users/xxyahir17/.nuget/packages/",
-        "outputPath": "/Users/xxyahir17/Documents/Github-Desktop/school-manager/backend/obj/",
+        "projectPath": "/app/backend.csproj",
+        "packagesPath": "/root/.nuget/packages/",
+        "outputPath": "/app/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/xxyahir17/.nuget/NuGet/NuGet.Config"
+          "/root/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -101,7 +101,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.410/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.411/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
